@@ -17,9 +17,6 @@ class CreateEmployeesTable extends Migration
             $table->bigIncrements('id');
 
             $table->unsignedBigInteger('user_id');
-            $table->string('full_name');
-            $table->string('email');
-            $table->string('phone');
 
             $table->timestamps();
 

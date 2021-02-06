@@ -10,9 +10,6 @@ use Illuminate\Support\Collection;
 /**
  * @property int $id
  * @property int $user_id
- * @property string $full_name
- * @property string $email
- * @property string $phone
  * @property User $user
  * @property EmployeePost $employeePost
  * @property Collection<EmployeeSkill> $employeeSkills
@@ -21,9 +18,6 @@ class Employee extends Model
 {
     protected $fillable = [
         'user_id',
-        'full_name',
-        'email',
-        'phone',
     ];
 
     public function user()

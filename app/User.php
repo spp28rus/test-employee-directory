@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\StringHelper;
 use App\Models\Employee;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -17,7 +18,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
+        'phone_number',
     ];
 
     /**
@@ -26,7 +30,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
+        'phone_number_slug',
     ];
 
     /**
@@ -41,5 +47,11 @@ class User extends Authenticatable
     public function employee()
     {
         return $this->hasOne(Employee::class);
+    }
+
+    public function setPhoneNumberAttribute($value)
+    {
+        $this->attributes['phone_number'] = $value;
+        $this->attributes['phone_number_slug'] = StringHelper::detectPhoneNumber($value);
     }
 }
