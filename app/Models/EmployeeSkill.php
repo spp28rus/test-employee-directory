@@ -25,11 +25,6 @@ class EmployeeSkill extends Model
         'creating' => EmployeeSkillCreatingEvent::class,
     ];
 
-    protected $with = [
-        'employee',
-        'skill',
-    ];
-
     public function employee()
     {
         return $this->belongsTo(Employee::class);

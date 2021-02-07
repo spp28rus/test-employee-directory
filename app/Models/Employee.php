@@ -34,4 +34,15 @@ class Employee extends Model
     {
         return $this->hasMany(EmployeeSkill::class);
     }
+
+    public static function getRelationsOfInfo()
+    {
+        return [
+            'user',
+            'employeePost',
+            'employeePost.post',
+            'employeeSkills',
+            'employeeSkills.skill',
+        ];
+    }
 }
