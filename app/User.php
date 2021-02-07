@@ -4,6 +4,8 @@ namespace App;
 
 use App\Helpers\StringHelper;
 use App\Models\Employee;
+use App\Models\Role;
+use App\Models\UserRole;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -63,5 +65,38 @@ class User extends Authenticatable
     {
         $this->attributes['phone_number'] = $value;
         $this->attributes['phone_number_slug'] = StringHelper::detectPhoneNumber($value);
+    }
+
+    public function userRoles()
+    {
+        return $this->hasMany(UserRole::class);
+    }
+
+    public function hasRole(string $slug)
+    {
+        return (bool) $this->getRoleBuilderBySlug($slug)->first();
+    }
+
+    public function deleteRole(string $slug)
+    {
+        return (bool) $this->getRoleBuilderBySlug($slug)->delete();
+    }
+
+    public function getRoleBuilderBySlug(string $slug)
+    {
+        return $this->userRoles()->whereHas('role', function ($query) use ($slug) {
+            $query->where('slug', $slug);
+        });
+    }
+
+    public function addRole(string $slug)
+    {
+        if ($this->hasRole($slug)) {
+            return;
+        }
+
+        return $this->userRoles()->create([
+            'role_id' => Role::getBySlug($slug)->id,
+        ]);
     }
 }
