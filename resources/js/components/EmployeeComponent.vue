@@ -20,6 +20,7 @@
                         v-model="selectedSkills"
                         :options="skills"
                         @change="skillsChange"
+                        :disabled="!postId"
                         switches
                     >
                     </b-form-checkbox-group>
@@ -49,7 +50,9 @@ export default {
     },
     methods: {
         updateEmployee() {
-            axios.get('/employee/' + this.id)
+            let url = addApiTokenToUrl('/api/v1/employee/' + this.id);
+
+            axios.get(url)
                 .then(({ data }) => {
                     console.log(data);
                     this.employee = data.data;
@@ -70,7 +73,9 @@ export default {
                 { value: null, text: 'Please select an post' },
             ];
 
-            axios.get('/post')
+            let url = addApiTokenToUrl('/api/v1/post');
+
+            axios.get(url)
                 .then(({ data }) => {
                     data.data.forEach(element => {
                         this.posts.push(
@@ -83,31 +88,46 @@ export default {
                 });
         },
         updateSkills() {
-            axios.get('/skill')
+            let url = addApiTokenToUrl('/api/v1/skill');
+
+            axios.get(url)
                 .then(({ data }) => {
-                    data.data.forEach(element => {
-                        this.skills.push(
-                            { value: element.id, text: element.title },
-                        );
-                    });
+                    this.updateSkillsFromData(data.data);
                 })
                 .catch(() => {
                     alert('Error!');
                 });
         },
+        updateSkillsFromData(data) {
+            this.skills = [];
+
+            data.forEach(element => {
+                this.skills.push(
+                    { value: element.id, text: element.title },
+                );
+            });
+        },
         postChange() {
-            axios.patch(`/employee-post/${this.id}/update/${this.postId}`)
-                .then(({ data }) => {})
-                .catch(() => {
-                    alert('Error!');
-                });
+            let url = addApiTokenToUrl(`/api/v1/employee-post/${this.id}/update`);
+
+            axios.patch(url, {
+                'post_id': this.postId ? this.postId : 0,
+            })
+            .then(({ data }) => {})
+            .catch(() => {
+                alert('Error!');
+            });
 
         },
         skillsChange() {
-            axios.patch(`/employee-skills/${this.id}/update`, {
+            let url = addApiTokenToUrl(`/api/v1/employee-skills/${this.id}/update`);
+
+            axios.patch(url, {
                 'skill_ids': this.selectedSkills,
             })
-            .then(({ data }) => {})
+            .then(({ data }) => {
+                this.updateSkillsFromData(data.data);
+            })
             .catch(() => {
                 alert('Error!');
             });

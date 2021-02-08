@@ -70,7 +70,9 @@ export default {
     },
     methods: {
         updateTable() {
-            axios.get(this.url)
+            let url = addApiTokenToUrl(`/api/v1${this.url}`);
+
+            axios.get(url)
                 .then(({ data }) => {
                     this.items = data.data;
                 })
@@ -80,7 +82,11 @@ export default {
 
         },
         createItem() {
-            axios.post(this.url, {
+            let url = addApiTokenToUrl(`/api/v1${this.url}`);
+
+            console.log(url);
+
+            axios.post(url, {
                 'title': this.itemTitle,
             })
             .then(({ data }) => {
@@ -96,7 +102,9 @@ export default {
                 return;
             }
 
-            axios.delete(this.url + '/' + itemId)
+            let url = addApiTokenToUrl(`/api/v1${this.url}/${itemId}`);
+
+            axios.delete(url)
             .then(({ data }) => {
                 for (let index = 0; index < this.items.length; index++) {
                     const element = this.items[index];
@@ -114,7 +122,9 @@ export default {
             });
         },
         changeTitle(itemId, title) {
-            axios.patch(this.url + '/' + itemId, {
+            let url = addApiTokenToUrl(`/api/v1${this.url}/${itemId}`);
+
+            axios.patch(url, {
                 'title': title,
             })
             .then(({ data }) => {})

@@ -21,7 +21,13 @@ Vue.use(BootstrapVue);
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-// Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+
+window.addApiTokenToUrl = function(url, delimiter = '?') {
+    let apiToken = document.querySelector('meta[name="api-token"]').getAttribute('content');
+
+    return url + delimiter + 'api_token=' + apiToken;
+}
+
 Vue.component('employees-table-component', require('./components/EmployeesTableComponent.vue').default);
 Vue.component('simple-title-table-component', require('./components/SimpleTitleTableComponent.vue').default);
 Vue.component('employee-component', require('./components/EmployeeComponent.vue').default);

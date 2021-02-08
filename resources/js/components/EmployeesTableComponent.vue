@@ -118,9 +118,9 @@ export default {
         this.selectedSorting = this.sortingOptions[0].value;
 
         if (! this.onlyPublicInfo) {
-            this.url = '/employee';
+            this.url = 'api/v1/employee';
         } else {
-            this.url = '/employee-public-info';
+            this.url = 'api/v1/employee-public-info';
         }
 
         this.updateTable();
@@ -182,6 +182,10 @@ export default {
                 }
             }
 
+            if (! this.onlyPublicInfo) {
+                url = addApiTokenToUrl(url, '&');
+            }
+
             axios.get(url)
                 .then(({ data }) => {
                     this.items = data.data;
@@ -194,7 +198,9 @@ export default {
 
         },
         isAdminChange(item) {
-            axios.patch(`/user-role/${item.user.id}/is-admin`, {
+            let url = addApiTokenToUrl(`api/v1/user-role/${item.user.id}/is-admin`);
+
+            axios.patch(url, {
                 'is_admin': item.is_admin,
             })
             .then(({ data }) => {})
@@ -207,7 +213,9 @@ export default {
                 { value: null, text: 'Please select an post' },
             ];
 
-            axios.get('/post')
+            let url = addApiTokenToUrl('/api/v1/post');
+
+            axios.get(url)
                 .then(({ data }) => {
                     data.data.forEach(element => {
                         this.posts.push(
@@ -224,7 +232,9 @@ export default {
                 { value: null, text: 'Please select an skill' },
             ];
 
-            axios.get('/skill')
+            let url = addApiTokenToUrl('/api/v1/skill');
+
+            axios.get(url)
                 .then(({ data }) => {
                     data.data.forEach(element => {
                         this.skills.push(
