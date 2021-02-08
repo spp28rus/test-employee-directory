@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BaseAutorizeAdminCheckRequest;
 
-class PostsPageController extends Controller
+class PostsController extends Controller
 {
     public function index(BaseAutorizeAdminCheckRequest $request)
     {

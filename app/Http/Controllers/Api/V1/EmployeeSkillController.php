@@ -1,9 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\V1;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\EmployeeSkillUpdateRequest;
+use App\Http\Resources\SkillsResource;
 use App\Models\Employee;
+use App\Models\Skill;
 use Illuminate\Support\Facades\DB;
 
 class EmployeeSkillController extends Controller
@@ -23,5 +26,9 @@ class EmployeeSkillController extends Controller
         }
 
         DB::commit();
+
+        return new SkillsResource(
+            Skill::all()
+        );
     }
 }
