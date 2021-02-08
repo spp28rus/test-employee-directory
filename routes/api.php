@@ -20,9 +20,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::group([
     'prefix' => 'v1',
+    'as' => 'api.v1.',
 ], function () {
 
-    Route::get('/employee-public-info', 'Api\V1\EmployeePublicInfoController@index');
+    Route::get('/employee-public-info', 'Api\V1\EmployeePublicInfoController@index')
+        ->name('employee_public_info.index');
 
     Route::group([
         'middleware' => 'auth:api',
@@ -35,7 +37,8 @@ Route::group([
             'destroy',
         ]);
 
-        Route::patch('/user-role/{user}/is-admin', 'Api\V1\UserRoleController@updateIsAdmin');
+        Route::patch('/user-role/{user}/is-admin', 'Api\V1\UserRoleController@updateIsAdmin')
+            ->name('user_role.is_admin.update');
 
         Route::resource('post', 'Api\V1\PostController')
             ->only([
@@ -55,9 +58,11 @@ Route::group([
                 'destroy',
             ]);
 
-        Route::patch('/employee-post/{employee}/update', 'Api\V1\EmployeePostController@update');
+        Route::patch('/employee-post/{employee}/update', 'Api\V1\EmployeePostController@update')
+            ->name('employee_post.update');
 
-        Route::patch('/employee-skills/{employee}/update', 'Api\V1\EmployeeSkillController@update');
+        Route::patch('/employee-skills/{employee}/update', 'Api\V1\EmployeeSkillController@update')
+            ->name('employee_skill.update');
 
     });
 });

@@ -21,7 +21,9 @@ class BaseAutorizeAdminCheckRequest extends FormRequest
          */
         $authUser = Auth::user();
 
-        return $authUser->hasRole(Role::ADMIN_SLUG);
+        $result = $authUser->hasRole(Role::ADMIN_SLUG);
+
+        return $result;
     }
 
     /**
