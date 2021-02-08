@@ -9,14 +9,16 @@ use App\Models\UserRole;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Str;
 
 /**
  * @property int $id
  * @property string $name
  * @property string $email
  * @property string $password
- * @property string $phone_number
+ * @property string $api_token
  * @property string $remember_token
+ * @property string $phone_number
  * @property string $phone_number_slug
  * @property Employee $employee
  */
@@ -43,6 +45,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'api_token',
         'remember_token',
         'phone_number_slug',
     ];
@@ -98,5 +101,20 @@ class User extends Authenticatable
         return $this->userRoles()->create([
             'role_id' => Role::getBySlug($slug)->id,
         ]);
+    }
+
+    public function getOrCreateApiToken()
+    {
+        if (! $this->api_token) {
+            $this->api_token = self::generateApiToken();
+            $this->save();
+        }
+
+        return $this->api_token;
+    }
+
+    public static function generateApiToken()
+    {
+        return uniqid() . Str::random(40);
     }
 }
